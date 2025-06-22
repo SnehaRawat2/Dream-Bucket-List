@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Dream Bucket List</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.7);
+      z-index: 0;
+      backdrop-filter: blur(2px);
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      max-width: 1000px;
+      width: 100%;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .progress-container {
+      background-color: #e0e0e0;
+      border-radius: 30px;
+      overflow: hidden;
+      margin: 10px auto 30px auto;
+      height: 25px;
+      width: 90%;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(to right, #00c9a7, #61d170);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff6ef;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      background: #ffeedd;
+    }
+
+    .card.completed {
+      background: #d2f8d2;
+      text-decoration: line-through;
+      color: #14532d;
+    }
+
+    .card::before {
+      content: "🔲";
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 20px;
+      transition: transform 0.3s;
+    }
+
+    .card.completed::before {
+      content: "✅";
+      color: green;
+      transform: scale(1.4);
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .desc {
+      font-size: 15px;
+      line-height: 1.4;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .title {
+        font-size: 18px;
+      }
+
+      .desc {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>🌟 My Dream Bucket List 🌟</h1>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="grid" id="bucketList">
+      <div class="card" onclick="toggle(this)">
+        <div class="title">🎯 Visit Japan</div>
+        <div class="desc">Walk through cherry blossoms, eat sushi in Tokyo, and explore ancient temples.</div>
+      </div>
+      <div class="card" onclick="toggle(this)">
+        <div class="title">🌊 Learn to surf</div>
+        <div class="desc">Catch waves and fall gloriously in the golden waters of dawn.</div>
+      </div>
+      <div class="card" onclick="toggle(this)">
+        <div class="title">📚 Read 50 books in a year</div>
+        <div class="desc">Adventure through pages and universes beyond your own.</div>
+      </div>
+      <div class="card" onclick="toggle(this)">
+        <div class="title">🧗‍♂️ Go rock climbing</div>
+        <div class="desc">Push your limits on vertical walls and mountain faces.</div>
+      </div>
+      <div class="card" onclick="toggle(this)">
+        <div class="title">🏔 Trek in the Himalayas</div>
+        <div class="desc">Stand above the clouds and feel closer to the heavens.</div>
+      </div>
+      <div class="card" onclick="toggle(this)">
+        <div class="title">🎨 Paint a full canvas</div>
+        <div class="desc">Let your emotions dance in colors across the canvas.</div>
+      </div>
+      <div class="card" onclick="toggle(this)">
+        <div class="title">🎤 Perform at an open mic</div>
+        <div class="desc">Express yourself on a stage lit by courage and truth.</div>
+      </div>
+      <div class="card" onclick="toggle(this)">
+        <div class="title">🌍 Volunteer abroad</div>
+        <div class="desc">Serve, grow, and connect with the world beyond borders.</div>
+      </div>
+      <div class="card" onclick="toggle(this)">
+        <div class="title">🚁 Ride in a helicopter</div>
+        <div class="desc">See your world from a divine bird’s-eye perspective.</div>
+      </div>
+      <div class="card" onclick="toggle(this)">
+        <div class="title">⭐ Sleep under the stars</div>
+        <div class="desc">Lie back, look up, and listen to the universe whisper.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggle(item) {
+      item.classList.toggle("completed");
+      updateProgress();
+      saveState();
+    }
+
+    function updateProgress() {
+      const cards = document.querySelectorAll(".card");
+      const completedCards = document.querySelectorAll(".card.completed");
+      const percentage = (completedCards.length / cards.length) * 100;
+      document.getElementById("progressBar").style.width = percentage + "%";
+
+      if (completedCards.length === cards.length) {
+        celebrate();
+      }
+    }
+
+    function celebrate() {
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 }
+      });
+    }
+
+    function saveState() {
+      const cards = document.querySelectorAll(".card");
+      const completed = [];
+      cards.forEach((card, index) => {
+        if (card.classList.contains("completed")) {
+          completed.push(index);
+        }
+      });
+      localStorage.setItem("bucketListCompleted", JSON.stringify(completed));
+    }
+
+    window.onload = function () {
+      const completed = JSON.parse(localStorage.getItem("bucketListCompleted")) || [];
+      const cards = document.querySelectorAll(".card");
+      completed.forEach(index => {
+        if (cards[index]) cards[index].classList.add("completed");
+      });
+      updateProgress();
+    };
+  </script>
+
+</body>
+
+</html>
+
