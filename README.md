@@ -1,4 +1,4 @@
-# ✨ Dream Bucket List Web App
+# ✨ Dream Bucket List 
 
 This is a minimal, interactive "Dream Bucket List" web application built using HTML, CSS, and JavaScript. It allows users to track personal life goals with visual feedback and engaging UI elements.
 
